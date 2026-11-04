@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { useSettings } from "../lib/data";
 import { SiteFooter } from "./SiteFooter";
@@ -6,14 +6,18 @@ import "./layout.css";
 
 // React Router 不會自動捲動到 hash，換頁時手動處理
 function useScrollToHash() {
-	const { pathname, hash } = useLocation();
+	const { pathname, hash, key } = useLocation();
+	const prevPathname = useRef(pathname);
 	useEffect(() => {
-		if (!hash) {
+		// 依賴 key：重複點擊同一個 hash 連結時也要再次捲動
+		if (hash) {
+			document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
+		} else if (prevPathname.current !== pathname) {
+			// 只在換頁時回到頂端；同頁更新查詢參數（如 /book 選擇心理師）時保持位置
 			window.scrollTo(0, 0);
-			return;
 		}
-		document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
-	}, [pathname, hash]);
+		prevPathname.current = pathname;
+	}, [pathname, hash, key]);
 }
 
 export function PublicLayout() {

@@ -74,9 +74,16 @@ export function BookPage() {
 			) : (
 				<section className="book-panel" aria-labelledby="slot-title">
 					<h2 id="slot-title">{selected?.name}的可預約時段</h2>
+					{/* 未設定聯絡方式時不叫人聯繫診所，避免流程走到死路 */}
 					<p className="book-pending">
-						線上選時段的功能還在建置中。目前請直接聯繫診所，告訴我們你想預約{selected?.name}。
-						{settings?.contactInfo && <span className="book-contact">{settings.contactInfo}</span>}
+						{settings?.contactInfo ? (
+							<>
+								線上選時段的功能還在建置中。目前請直接聯繫診所，告訴我們你想預約{selected?.name}。
+								<span className="book-contact">{settings.contactInfo}</span>
+							</>
+						) : (
+							"線上選時段的功能還在建置中，開放後就能在這裡選擇時段與諮商室。"
+						)}
 					</p>
 					<div className="book-actions">
 						<Link to={`/book?counselor=${encodeURIComponent(selected?.id ?? "")}`} className="btn btn-ghost">
