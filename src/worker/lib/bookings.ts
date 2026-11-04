@@ -1,5 +1,5 @@
-import { and, eq, lt, lte, sql } from "drizzle-orm";
-import type { BookingStatus } from "../../shared/constants";
+import { and, eq, getTableColumns, lt, lte, sql } from "drizzle-orm";
+import { ACTIVE_BOOKING_STATUSES, type BookingStatus } from "../../shared/constants";
 import type { BookingDto } from "../../shared/api";
 import type { Settings } from "../../shared/settings";
 import { toIso, wallClock } from "../../shared/time";
@@ -271,28 +271,59 @@ export async function createBooking(ctx: Ctx, input: CreateInput): Promise<Resul
 	};
 	const rows = notificationsFor(ctx, booking, names, "created", token);
 
+	const d1 = ctx.env.DB;
+	const columns = getTableColumns(bookings);
+	const keys = Object.keys(booking) as (keyof Booking)[];
+	const active = ACTIVE_BOOKING_STATUSES.map(() => "?").join(", ");
+
+	let inserted: D1Result | undefined;
 	try {
-		await db.batch([
+		[, inserted] = await d1.batch([
 			// 先釋出同一時段已過保留期限的未驗證預約，否則 unique index 會擋下新預約
-			db
-				.update(bookings)
-				.set({ status: "expired", updatedAt: nowIso })
-				.where(
-					and(
-						eq(bookings.status, "unverified"),
-						lte(bookings.holdExpiresAt, nowIso),
-						eq(bookings.startAt, booking.startAt),
-						sql`(${bookings.counselorId} = ${booking.counselorId} OR ${bookings.roomId} = ${booking.roomId})`,
-					),
+			d1
+				.prepare(
+					`UPDATE bookings SET status = 'expired', updated_at = ?
+					 WHERE status = 'unverified' AND hold_expires_at <= ?
+					   AND start_at < ? AND end_at > ? AND (counselor_id = ? OR room_id = ?)`,
+				)
+				.bind(nowIso, nowIso, booking.endAt, booking.startAt, booking.counselorId, booking.roomId),
+			// 與任何有效預約時間重疊（不只相同起點）就不寫入；D1 batch 為單一交易，可防止並行預約重疊
+			d1
+				.prepare(
+					`INSERT INTO bookings (${keys.map((k) => columns[k].name).join(", ")})
+					 SELECT ${keys.map(() => "?").join(", ")}
+					 WHERE NOT EXISTS (
+						SELECT 1 FROM bookings
+						WHERE status IN (${active})
+						  AND (status <> 'unverified' OR hold_expires_at IS NULL OR hold_expires_at > ?)
+						  AND start_at < ? AND end_at > ?
+						  AND (counselor_id = ? OR room_id = ?)
+					 )`,
+				)
+				.bind(
+					...keys.map((k) => booking[k]),
+					...ACTIVE_BOOKING_STATUSES,
+					nowIso,
+					booking.endAt,
+					booking.startAt,
+					booking.counselorId,
+					booking.roomId,
 				),
-			db.insert(bookings).values(booking),
-			...(rows.length ? [db.insert(notifications).values(rows)] : []),
+			...rows.map((r) =>
+				d1
+					.prepare(
+						`INSERT INTO notifications (id, booking_id, channel, recipient, template, payload)
+						 SELECT ?, ?, ?, ?, ?, ? WHERE EXISTS (SELECT 1 FROM bookings WHERE id = ?)`,
+					)
+					.bind(r.id, r.bookingId, r.channel, r.recipient, r.template, JSON.stringify(r.payload), booking.id),
+			),
 		]);
 	} catch (err) {
 		// 同時有人預約同一時段：partial unique index 擋下
 		if (String(err).includes("UNIQUE constraint failed")) return fail("slot_taken");
 		throw err;
 	}
+	if (!inserted?.meta.changes) return fail("slot_taken");
 
 	const dto = toDto({ booking, ...names }, settings, now);
 	return { ok: true, value: { booking: dto, token, notificationIds: rows.map((r) => r.id!) } };

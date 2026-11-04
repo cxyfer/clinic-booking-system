@@ -109,6 +109,21 @@ describe("建立預約（需要 email 驗證）", () => {
 		expect((await firstSlot()).time).toBe("10:00");
 	});
 
+	it("時段間隔短於時長時，不同起點但重疊的預約也會被擋下", async () => {
+		await setSetting("slotIntervalMinutes", 30);
+		const slot = await firstSlot();
+		const input = { counselorId: "co_a", roomId: "rm_1", ...client };
+		const overlapping = new Date(Date.parse(slot.startAt) + 30 * 60_000).toISOString();
+		// 同時送出 09:00 與 09:30（皆為 50 分鐘）
+		const [a, b] = await Promise.all([
+			call("/bookings", { ...input, startAt: slot.startAt }),
+			call("/bookings", { ...input, startAt: overlapping }),
+		]);
+		expect([a.status, b.status].sort()).toEqual([201, 409]);
+		const row = await env.DB.prepare("SELECT count(*) AS count FROM bookings").first<{ count: number }>();
+		expect(row?.count).toBe(1);
+	});
+
 	it("驗證後進入待確認，通知心理師", async () => {
 		const tokens = captureTokens();
 		await book();
