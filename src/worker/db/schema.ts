@@ -158,9 +158,8 @@ export const bookings = sqliteTable(
 		clientPhone: text("client_phone"),
 		// 僅後台可見，不放入通知內容
 		staffNote: text("staff_note"),
-		// token 只存 SHA-256 雜湊
+		// 管理連結 token，只存 SHA-256 雜湊；email 驗證也使用同一個連結
 		manageTokenHash: text("manage_token_hash").notNull(),
-		verifyTokenHash: text("verify_token_hash"),
 		// unverified 狀態的保留期限
 		holdExpiresAt: text("hold_expires_at"),
 		// .ics 更新時遞增
