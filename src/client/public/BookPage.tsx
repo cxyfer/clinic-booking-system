@@ -34,7 +34,10 @@ export function BookPage() {
 		});
 
 	// 換步驟時回到頁首（同一路徑，layout 不會自動捲動）
-	useEffect(() => window.scrollTo({ top: 0 }), [step, created]);
+	// 新版瀏覽器的 scrollTo 會回傳 Promise，不可作為 effect 的回傳值（會被當成 cleanup 呼叫）
+	useEffect(() => {
+		window.scrollTo({ top: 0 });
+	}, [step, created]);
 
 	if (created && settings) return <CheckEmail {...created} settings={settings} />;
 
