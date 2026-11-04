@@ -1,0 +1,5 @@
+# 複製為 .dev.vars 供本地開發使用
+RESEND_API_KEY=
+WEBHOOK_SECRET=dev-webhook-secret
+# Turnstile 官方測試用 secret（永遠通過）
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
