@@ -1,0 +1,65 @@
+.rooms {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+	gap: var(--s-5);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.room {
+	--room: var(--c-room-forest);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border-radius: var(--radius-m);
+	background: var(--c-paper);
+	border: 1px solid var(--c-line);
+}
+
+.room-forest {
+	--room: var(--c-room-forest);
+}
+.room-water {
+	--room: var(--c-room-water);
+}
+.room-sun {
+	--room: var(--c-room-sun);
+}
+
+.room-motif {
+	background: var(--room);
+	padding: var(--s-5) var(--s-5) 0;
+}
+
+.room-motif svg {
+	width: 100%;
+	height: 6.5rem;
+	fill: none;
+	stroke: rgb(255 255 255 / 0.55);
+	stroke-width: 2;
+	stroke-linecap: round;
+}
+
+.room-forest .room-motif circle {
+	fill: rgb(242 210 122 / 0.35);
+	stroke: none;
+}
+
+.room-body {
+	padding: var(--s-5);
+}
+
+.room h3 {
+	font-size: var(--t-lg);
+	color: var(--room);
+}
+
+.room-body p {
+	margin-top: var(--s-2);
+}
+
+.room-capacity {
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+}

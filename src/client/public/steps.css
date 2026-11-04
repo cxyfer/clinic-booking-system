@@ -1,0 +1,83 @@
+.steps {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+	gap: var(--s-6) var(--s-5);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: step;
+}
+
+.step {
+	position: relative;
+	padding-top: var(--s-6);
+}
+
+/* 步驟之間的連接線 */
+.step::before {
+	content: "";
+	position: absolute;
+	top: 1.25rem;
+	left: 2.5rem;
+	right: calc(var(--s-5) * -1);
+	border-top: 1px dashed var(--c-line);
+}
+.step:last-child::before {
+	display: none;
+}
+
+.step-num {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border: 1.5px solid var(--c-moss);
+	border-radius: 50%;
+	font-family: var(--f-display);
+	font-size: var(--t-md);
+	color: var(--c-moss);
+	background: var(--c-mist);
+}
+
+.step h3 {
+	margin-top: var(--s-5);
+	font-size: var(--t-md);
+}
+
+.step p {
+	margin-top: var(--s-2);
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+	line-height: 1.8;
+}
+
+@media (max-width: 40rem) {
+	.step::before {
+		display: none;
+	}
+}
+
+.notes {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+	gap: var(--s-5) var(--s-6);
+	margin: var(--s-8) 0 0;
+	padding-top: var(--s-6);
+	border-top: 1px solid var(--c-line);
+}
+
+.notes dt {
+	font-family: var(--f-display);
+	font-size: var(--t-md);
+	font-weight: 700;
+}
+
+.notes dd {
+	margin: var(--s-2) 0 0;
+	font-size: var(--t-sm);
+	line-height: 1.8;
+	color: var(--c-stone);
+}

@@ -1,0 +1,226 @@
+/* ── 設計 token ───────────────────────────────────────── */
+:root {
+	/* 夜苔：主視覺與頁尾的底色 */
+	--c-night: #183b3a;
+	--c-night-2: #21504d;
+	/* 墨綠：內文 */
+	--c-ink: #1d2b29;
+	/* 石：次要文字 */
+	--c-stone: #56665f;
+	/* 霧：頁面底色 */
+	--c-mist: #edf2ef;
+	/* 紙：內容表面 */
+	--c-paper: #fbfcfa;
+	/* 苔：主要按鈕 */
+	--c-moss: #2f6655;
+	--c-moss-hover: #255546;
+	/* 葉光：只用在光圈、焦點與少數強調 */
+	--c-light: #f2d27a;
+	--c-line: #cdd8d3;
+
+	/* 諮商室識別色 */
+	--c-room-forest: #3e6b4f;
+	--c-room-water: #3c6a8a;
+	--c-room-sun: #b07a2e;
+
+	--f-display: "LXGW WenKai TC", "Kaiti TC", "BiauKai", serif;
+	--f-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+
+	/* 字級：以 17px 為基準、1.25 倍率 */
+	--t-sm: 0.875rem;
+	--t-base: 1.0625rem;
+	--t-md: 1.3125rem;
+	--t-lg: 1.625rem;
+	--t-xl: 2.0625rem;
+	--t-2xl: clamp(2.25rem, 1.5rem + 3vw, 3.25rem);
+	--t-hero: clamp(2.75rem, 1.6rem + 5.2vw, 5rem);
+
+	--s-1: 0.25rem;
+	--s-2: 0.5rem;
+	--s-3: 0.75rem;
+	--s-4: 1rem;
+	--s-5: 1.5rem;
+	--s-6: 2rem;
+	--s-7: 3rem;
+	--s-8: 4.5rem;
+	--s-9: 7rem;
+
+	--content: 72rem;
+	--gutter: clamp(1.25rem, 4vw, 2.5rem);
+	--radius-s: 6px;
+	--radius-m: 14px;
+	--radius-pill: 999px;
+
+	color-scheme: light;
+}
+
+/* ── 基礎 ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: var(--f-body);
+	font-size: var(--t-base);
+	line-height: 1.75;
+	color: var(--c-ink);
+	background: var(--c-mist);
+	text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+	margin: 0;
+	font-family: var(--f-display);
+	font-weight: 700;
+	line-height: 1.3;
+	letter-spacing: 0.02em;
+}
+
+p {
+	margin: 0;
+	text-wrap: pretty;
+}
+
+a {
+	color: inherit;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+:focus-visible {
+	outline: 3px solid var(--c-light);
+	outline-offset: 3px;
+	border-radius: var(--radius-s);
+}
+
+/* 淺色背景上改用深色外框，確保對比 */
+.on-light :focus-visible {
+	outline-color: var(--c-moss);
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+.wrap {
+	width: 100%;
+	max-width: var(--content);
+	margin-inline: auto;
+	padding-inline: var(--gutter);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
+}
+
+/* ── 按鈕 ─────────────────────────────────────────────── */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--s-2);
+	min-height: 3rem;
+	padding: 0 var(--s-5);
+	border: 1.5px solid transparent;
+	border-radius: var(--radius-pill);
+	font: 500 var(--t-base) / 1 var(--f-body);
+	letter-spacing: 0.04em;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		background-color 0.2s,
+		border-color 0.2s,
+		color 0.2s;
+}
+
+.btn-primary {
+	background: var(--c-moss);
+	color: #fff;
+}
+.btn-primary:hover {
+	background: var(--c-moss-hover);
+}
+
+/* 深色背景上的主要按鈕 */
+.btn-light {
+	background: var(--c-light);
+	color: var(--c-night);
+}
+.btn-light:hover {
+	background: #f7e0a0;
+}
+
+.btn-ghost {
+	border-color: currentColor;
+	background: transparent;
+	color: inherit;
+}
+.btn-ghost:hover {
+	background: rgb(255 255 255 / 0.08);
+}
+
+.btn:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+/* ── 區段 ─────────────────────────────────────────────── */
+.section {
+	padding-block: var(--s-9);
+}
+
+.section-head {
+	max-width: 34rem;
+	margin-bottom: var(--s-7);
+}
+
+.section-head h2 {
+	font-size: var(--t-2xl);
+}
+
+.section-head p {
+	margin-top: var(--s-4);
+	color: var(--c-stone);
+}
+
+.status-text {
+	color: var(--c-stone);
+}
+
+@media (max-width: 40rem) {
+	.section {
+		padding-block: var(--s-8);
+	}
+}
+
+.on-light .btn-ghost:hover {
+	background: rgb(24 59 58 / 0.06);
+}

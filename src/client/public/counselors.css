@@ -1,0 +1,72 @@
+.counselors {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-top: 1px solid var(--c-line);
+}
+
+.counselor {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: var(--s-6);
+	padding-block: var(--s-6);
+	border-bottom: 1px solid var(--c-line);
+}
+
+/* 以姓氏作為印記，之後換成照片 */
+.counselor-mark {
+	display: grid;
+	place-items: center;
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 50%;
+	background: var(--c-night);
+	color: var(--c-light);
+	font-family: var(--f-display);
+	font-size: var(--t-xl);
+}
+
+.counselor h3 {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--s-1) var(--s-3);
+	font-size: var(--t-lg);
+}
+
+.counselor-title {
+	font-family: var(--f-body);
+	font-size: var(--t-sm);
+	font-weight: 400;
+	color: var(--c-stone);
+	letter-spacing: 0.06em;
+}
+
+.counselor-specialties {
+	margin-top: var(--s-2);
+	max-width: 36em;
+}
+
+.counselor-rooms {
+	margin-top: var(--s-1);
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+}
+
+@media (max-width: 44rem) {
+	.counselor {
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: var(--s-4) var(--s-5);
+	}
+	.counselor-mark {
+		width: 3.5rem;
+		height: 3.5rem;
+		font-size: var(--t-lg);
+		align-self: start;
+	}
+	.counselor-cta {
+		grid-column: 2;
+		justify-self: start;
+	}
+}

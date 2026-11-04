@@ -1,0 +1,139 @@
+.skip-link {
+	position: absolute;
+	top: var(--s-2);
+	left: var(--s-2);
+	z-index: 10;
+	padding: var(--s-2) var(--s-4);
+	background: var(--c-light);
+	color: var(--c-night);
+	border-radius: var(--radius-s);
+	transform: translateY(-200%);
+}
+.skip-link:focus {
+	transform: none;
+}
+
+/* ── 頁首：與主視覺同色，像同一個空間 ─────────────────── */
+.site-header {
+	background: var(--c-night);
+	color: var(--c-paper);
+}
+
+.site-header-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--s-5);
+	min-height: 4.5rem;
+}
+
+.site-brand {
+	font-family: var(--f-display);
+	font-size: var(--t-md);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.site-nav {
+	display: flex;
+	align-items: center;
+	gap: var(--s-5);
+}
+
+.site-nav a:not(.btn) {
+	font-size: var(--t-sm);
+	letter-spacing: 0.08em;
+	text-decoration: none;
+	opacity: 0.85;
+}
+.site-nav a:not(.btn):hover {
+	opacity: 1;
+	text-decoration: underline;
+	text-underline-offset: 6px;
+}
+
+.site-nav-cta {
+	min-height: 2.5rem;
+	padding-inline: var(--s-4);
+	font-size: var(--t-sm);
+}
+
+@media (max-width: 40rem) {
+	/* 手機只保留預約按鈕，章節連結移到頁面內 */
+	.site-nav a:not(.btn) {
+		display: none;
+	}
+}
+
+/* ── 頁尾 ─────────────────────────────────────────────── */
+.site-footer {
+	background: var(--c-night);
+	color: var(--c-paper);
+	padding-block: var(--s-8);
+}
+
+.site-footer-inner {
+	display: grid;
+	grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+	gap: var(--s-7);
+}
+
+.crisis h2 {
+	font-size: var(--t-lg);
+	margin-bottom: var(--s-4);
+}
+
+.crisis p {
+	opacity: 0.9;
+}
+
+.crisis a {
+	color: var(--c-light);
+	font-weight: 700;
+}
+
+.hotlines {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--s-4) var(--s-6);
+	margin: var(--s-5) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.hotlines li {
+	display: flex;
+	flex-direction: column;
+}
+
+.hotlines a {
+	font-family: var(--f-display);
+	font-size: var(--t-xl);
+	line-height: 1.2;
+	text-decoration: none;
+}
+
+.hotlines span {
+	font-size: var(--t-sm);
+	opacity: 0.75;
+}
+
+.clinic-info {
+	align-self: end;
+	font-size: var(--t-sm);
+	opacity: 0.85;
+}
+
+.clinic-info-name {
+	font-family: var(--f-display);
+	font-size: var(--t-md);
+	margin-bottom: var(--s-2);
+}
+
+@media (max-width: 48rem) {
+	.site-footer-inner {
+		grid-template-columns: 1fr;
+	}
+}

@@ -30,3 +30,9 @@ INSERT OR IGNORE INTO availability_rules (id, counselor_id, weekday, start_time,
 	('ar_chen_6', 'co_chen', 6, '09:00', '15:00'),
 	('ar_wang_3', 'co_wang', 3, '14:00', '19:00'),
 	('ar_wang_6', 'co_wang', 6, '09:00', '17:00');
+
+-- 診所資訊（mock）
+INSERT OR IGNORE INTO settings (key, value) VALUES
+	('clinicName', '"樹蔭心理諮商所"'),
+	('clinicAddress', '"台北市大安區示範路 1 號 3 樓"'),
+	('contactInfo', '"電話 02-2700-0000（週一至週六 09:00–21:00）"');

@@ -1,0 +1,79 @@
+/* 後台以效率為主：只用內文字體、較密的間距 */
+.admin {
+	display: grid;
+	grid-template-columns: 14rem minmax(0, 1fr);
+	min-height: 100vh;
+}
+
+.admin-side {
+	padding: var(--s-5);
+	background: var(--c-night);
+	color: var(--c-paper);
+}
+
+.admin-brand {
+	margin-bottom: var(--s-5);
+	font-family: var(--f-display);
+	font-size: var(--t-md);
+}
+
+.admin-side ul {
+	display: grid;
+	gap: var(--s-1);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.admin-side a {
+	display: block;
+	padding: var(--s-2) var(--s-3);
+	border-radius: var(--radius-s);
+	font-size: var(--t-sm);
+	text-decoration: none;
+	opacity: 0.8;
+}
+
+.admin-side a:hover {
+	opacity: 1;
+	background: rgb(255 255 255 / 0.06);
+}
+
+.admin-side a.active {
+	opacity: 1;
+	background: rgb(255 255 255 / 0.12);
+}
+
+.admin-side :focus-visible {
+	outline-color: var(--c-light);
+}
+
+.admin-main {
+	padding: var(--s-7) var(--s-6);
+}
+
+.admin-empty {
+	max-width: 32rem;
+}
+
+.admin-empty h1 {
+	font-family: var(--f-body);
+	font-size: var(--t-lg);
+	font-weight: 500;
+}
+
+.admin-empty p {
+	margin-top: var(--s-3);
+	color: var(--c-stone);
+}
+
+@media (max-width: 44rem) {
+	.admin {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto 1fr;
+	}
+	.admin-side ul {
+		display: flex;
+		flex-wrap: wrap;
+	}
+}
