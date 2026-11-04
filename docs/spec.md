@@ -21,7 +21,7 @@
 ## 2. 技術架構
 
 ```
-Cloudflare Worker（Static Assets + API）
+Cloudflare Worker（Static Assets + API，以 cf CLI 與 cloudflare.config.ts 管理）
 ├─ 前端：React + Vite（@cloudflare/vite-plugin），前台／後台以 route 層級 code-split
 ├─ API：Hono + Zod（schema 前後端共用）
 ├─ DB：D1 + Drizzle ORM，mock 資料以 seed 匯入

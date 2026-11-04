@@ -7,10 +7,19 @@ export default defineConfig({
 		cloudflareTest(async () => {
 			const migrations = await readD1Migrations(path.join(import.meta.dirname, "migrations"));
 			return {
-				wrangler: { configPath: "./wrangler.jsonc" },
+				// @cloudflare/vitest-plugin 尚不讀取 cloudflare.config.ts，測試用 binding 在此宣告
 				miniflare: {
-					// 測試專用 binding，在 setup file 套用 migrations
-					bindings: { TEST_MIGRATIONS: migrations },
+					compatibilityDate: "2026-11-01",
+					d1Databases: ["DB"],
+					bindings: {
+						APP_URL: "http://localhost:5173",
+						EMAIL_PROVIDER: "console",
+						EMAIL_FROM: "Clinic <no-reply@example.com>",
+						WEBHOOK_URL: "",
+						WEBHOOK_SECRET: "test-webhook-secret",
+						// 在 setup file 套用 migrations
+						TEST_MIGRATIONS: migrations,
+					},
 				},
 			};
 		}),

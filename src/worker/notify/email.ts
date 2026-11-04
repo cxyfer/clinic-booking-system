@@ -49,7 +49,8 @@ class NoopProvider implements EmailProvider {
 }
 
 export function createEmailProvider(env: Env): EmailProvider {
-	switch (env.EMAIL_PROVIDER) {
+	// 型別推斷為設定檔中的字面值，需放寬為 string
+	switch (env.EMAIL_PROVIDER as string) {
 		case "resend":
 			if (!env.RESEND_API_KEY) {
 				throw new Error("EMAIL_PROVIDER=resend 需要設定 RESEND_API_KEY");
