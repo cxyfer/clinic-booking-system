@@ -1,0 +1,141 @@
+.book {
+	padding-block: var(--s-7) var(--s-9);
+	max-width: 52rem;
+}
+
+.book-head h1 {
+	font-size: var(--t-2xl);
+}
+
+.book-progress {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--s-2) var(--s-5);
+	margin: var(--s-5) 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+}
+
+.book-progress li {
+	display: flex;
+	align-items: center;
+	gap: var(--s-2);
+}
+
+.book-progress span {
+	display: grid;
+	place-items: center;
+	width: 1.75rem;
+	height: 1.75rem;
+	border: 1px solid var(--c-line);
+	border-radius: 50%;
+	font-family: var(--f-display);
+}
+
+.book-progress [aria-current="step"] {
+	color: var(--c-ink);
+	font-weight: 500;
+}
+.book-progress [aria-current="step"] span {
+	border-color: var(--c-moss);
+	background: var(--c-moss);
+	color: #fff;
+}
+
+.book-panel {
+	margin: var(--s-7) 0 0;
+	padding: 0;
+	border: 0;
+}
+
+.book-panel legend,
+.book-panel h2 {
+	padding: 0;
+	margin-bottom: var(--s-5);
+	font-family: var(--f-display);
+	font-size: var(--t-lg);
+	font-weight: 700;
+}
+
+.choice-list {
+	display: grid;
+	gap: var(--s-3);
+}
+
+.choice {
+	display: flex;
+	align-items: center;
+	gap: var(--s-4);
+	padding: var(--s-4) var(--s-5);
+	border: 1.5px solid var(--c-line);
+	border-radius: var(--radius-m);
+	background: var(--c-paper);
+	cursor: pointer;
+	transition: border-color 0.15s;
+}
+
+.choice:hover {
+	border-color: var(--c-stone);
+}
+
+/* 原生 radio 保留在無障礙樹中，外觀由整列呈現 */
+.choice input {
+	position: absolute;
+	opacity: 0;
+}
+
+.choice:has(input:checked) {
+	border-color: var(--c-moss);
+	box-shadow: inset 0 0 0 1px var(--c-moss);
+}
+
+.choice:has(input:focus-visible) {
+	outline: 3px solid var(--c-moss);
+	outline-offset: 2px;
+}
+
+.choice-mark {
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	background: var(--c-night);
+	color: var(--c-light);
+	font-family: var(--f-display);
+	font-size: var(--t-md);
+}
+
+.choice-text {
+	display: grid;
+}
+
+.choice-text strong {
+	font-family: var(--f-display);
+	font-size: var(--t-md);
+}
+
+.choice-text span {
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+}
+
+.book-actions {
+	margin-top: var(--s-6);
+}
+
+.book-pending {
+	padding: var(--s-5);
+	border-left: 3px solid var(--c-light);
+	background: var(--c-paper);
+	max-width: 36em;
+}
+
+.book-contact {
+	display: block;
+	margin-top: var(--s-2);
+	font-weight: 500;
+}

@@ -1,44 +1,67 @@
-import type { CounselorDto, RoomDto } from "../../shared/api";
-import { useApi } from "../lib/useApi";
+import { useCounselors, useRooms, useSettings } from "../lib/data";
+import { BookingNotes, BookingSteps } from "./BookingSteps";
+import { CounselorList } from "./CounselorList";
+import { Hero } from "./Hero";
+import { RoomGallery } from "./RoomGallery";
 
 export function HomePage() {
-	const counselors = useApi<CounselorDto[]>("/public/counselors");
-	const rooms = useApi<RoomDto[]>("/public/rooms");
-
-	if (counselors.error || rooms.error) return <p role="alert">資料載入失敗，請稍後再試。</p>;
-	if (counselors.loading || rooms.loading) return <p>載入中…</p>;
-
-	const roomName = (id: string) => rooms.data?.find((r) => r.id === id)?.name ?? id;
+	const settings = useSettings();
+	const counselors = useCounselors();
+	const rooms = useRooms();
 
 	return (
 		<>
-			<section>
-				<h2>心理師</h2>
-				<ul className="card-list">
-					{counselors.data?.map((c) => (
-						<li key={c.id} className="card">
-							<h3>
-								{c.name} <small>{c.title}</small>
-							</h3>
-							<p>{c.bio}</p>
-							<p className="muted">
-								可用空間：
-								{c.roomIds.length ? c.roomIds.map(roomName).join("、") : "全部"}
-							</p>
-						</li>
-					))}
-				</ul>
+			<Hero clinicName={settings.data?.clinicName ?? ""} />
+
+			<section id="counselors" className="section" aria-labelledby="counselors-title">
+				<div className="wrap split">
+					<header className="section-head">
+						<h2 id="counselors-title">心理師</h2>
+						<p>不確定要找誰也沒關係。先看看誰擅長你在意的事，第一次諮商時，心理師會和你一起確認方向。</p>
+					</header>
+					{counselors.error || rooms.error ? (
+						<p className="status-text" role="alert">
+							無法載入心理師資料。請重新整理頁面，或直接來電預約。
+						</p>
+					) : counselors.data && rooms.data ? (
+						<CounselorList counselors={counselors.data} rooms={rooms.data} />
+					) : (
+						<p className="status-text">正在載入心理師資料…</p>
+					)}
+				</div>
 			</section>
-			<section>
-				<h2>諮商空間</h2>
-				<ul className="card-list">
-					{rooms.data?.map((r) => (
-						<li key={r.id} className="card">
-							<h3>{r.name}</h3>
-							<p>{r.description}</p>
-						</li>
-					))}
-				</ul>
+
+			<section id="rooms" className="section section-rooms" aria-labelledby="rooms-title">
+				<div className="wrap">
+					<header className="section-head">
+						<h2 id="rooms-title">諮商室</h2>
+						<p>預約時可以選你待起來最自在的一間。</p>
+					</header>
+					{rooms.error ? (
+						<p className="status-text" role="alert">
+							無法載入諮商室資料。請重新整理頁面。
+						</p>
+					) : rooms.data ? (
+						<RoomGallery rooms={rooms.data} />
+					) : (
+						<p className="status-text">正在載入諮商室資料…</p>
+					)}
+				</div>
+			</section>
+
+			<section id="how" className="section" aria-labelledby="how-title">
+				<div className="wrap">
+					<header className="section-head">
+						<h2 id="how-title">預約方式</h2>
+						<p>不用註冊帳號，也不用先打電話。</p>
+					</header>
+					{settings.data && (
+						<>
+							<BookingSteps settings={settings.data} />
+							<BookingNotes settings={settings.data} />
+						</>
+					)}
+				</div>
 			</section>
 		</>
 	);

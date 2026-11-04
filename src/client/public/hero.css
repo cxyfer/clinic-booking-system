@@ -1,0 +1,48 @@
+.hero {
+	background:
+		radial-gradient(48rem 34rem at 72% 58%, var(--c-night-2), transparent 70%),
+		var(--c-night);
+	color: var(--c-paper);
+	padding-block: var(--s-8) var(--s-9);
+	overflow: hidden;
+}
+
+.hero-inner {
+	display: grid;
+	grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+	align-items: center;
+	gap: var(--s-7);
+}
+
+.hero h1 {
+	font-size: var(--t-hero);
+	line-height: 1.2;
+	letter-spacing: 0.06em;
+}
+
+.hero-lede {
+	max-width: 30em;
+	margin-top: var(--s-5);
+	font-size: var(--t-md);
+	line-height: 1.8;
+	opacity: 0.88;
+}
+
+.hero-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--s-3);
+	margin-top: var(--s-6);
+}
+
+@media (max-width: 52rem) {
+	.hero {
+		padding-block: var(--s-6) var(--s-8);
+	}
+	.hero-inner {
+		grid-template-columns: 1fr;
+	}
+	.hero .breathing-stage {
+		width: min(78vw, 20rem);
+	}
+}

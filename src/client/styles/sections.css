@@ -1,0 +1,23 @@
+/* 諮商室區段換上紙色，與前後區段做出節奏 */
+.section-rooms {
+	background: var(--c-paper);
+	border-block: 1px solid var(--c-line);
+}
+.section-rooms .room {
+	background: var(--c-mist);
+}
+
+/* 寬螢幕：標題在左欄固定，內容在右欄 */
+@media (min-width: 64rem) {
+	.split {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+		align-items: start;
+		gap: var(--s-7);
+	}
+	.split > .section-head {
+		position: sticky;
+		top: var(--s-6);
+		margin-bottom: 0;
+	}
+}

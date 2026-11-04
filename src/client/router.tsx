@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
-import { PublicLayout } from "./public/PublicLayout";
+import { BookPage } from "./public/BookPage";
 import { HomePage } from "./public/HomePage";
+import { PublicLayout } from "./public/PublicLayout";
 
 export const router = createBrowserRouter([
 	{
@@ -8,7 +9,8 @@ export const router = createBrowserRouter([
 		Component: PublicLayout,
 		children: [
 			{ index: true, Component: HomePage },
-			// TODO: /book、/booking/:id（管理連結）、/verify
+			{ path: "book", Component: BookPage },
+			// TODO: /booking/:id（管理連結）、/verify
 		],
 	},
 	{
