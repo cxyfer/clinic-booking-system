@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.28.0",
   "dependencies": {
     "drizzle-orm": "^0.45.4",
     "hono": "^4.13.16",
@@ -12,31 +13,32 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.67.0",
+    "@cloudflare/vite-plugin": "beta",
     "@cloudflare/vitest-plugin": "^1.5.1",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.2.1",
+    "cf": "1.0.0-beta.27",
     "drizzle-kit": "^0.31.11",
     "typescript": "^7.0.2",
     "vite": "^8.3.5",
-    "vitest": "^5.1.0",
-    "wrangler": "^4.157.0"
+    "vitest": "^5.1.0"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "cf dev",
+    "build": "cf workers types && tsc -b && cf build",
     "preview": "pnpm build && vite preview",
-    "deploy": "pnpm build && wrangler deploy",
-    "typecheck": "tsc -b",
+    "deploy": "pnpm build && cf deploy --prebuilt --mode production",
+    "typecheck": "cf workers types && tsc -b",
     "test": "vitest run",
-    "cf-typegen": "wrangler types --strict-vars=false src/worker/worker-configuration.d.ts",
+    "cf-typegen": "cf workers types",
     "db:generate": "drizzle-kit generate",
-    "db:migrate:local": "wrangler d1 migrations apply DB --local",
-    "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
-    "db:seed:local": "wrangler d1 execute DB --local --file seed/seed.sql",
-    "db:reset:local": "rm -rf .wrangler/state/v3/d1 && pnpm db:migrate:local && pnpm db:seed:local"
+    "db:migrate:local": "node scripts/d1.ts migrate --local",
+    "db:migrate:remote": "node scripts/d1.ts migrate",
+    "db:seed:local": "node scripts/d1.ts seed --local",
+    "db:reset:local": "rm -rf .cloudflare/state/v3/d1 && pnpm db:migrate:local && pnpm db:seed:local",
+    "db:seed:remote": "node scripts/d1.ts seed"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -2,8 +2,17 @@
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
 		"tsBuildInfoFile": "../node_modules/.tmp/tsconfig.test.tsbuildinfo",
-		"lib": ["ES2023"],
-		"types": ["@cloudflare/vitest-plugin/types"]
+		"lib": [
+			"ES2023"
+		],
+		"types": [
+			"@cloudflare/vitest-plugin/types"
+		]
 	},
-	"include": ["./**/*.ts", "../src/worker", "../src/shared"]
+	"include": [
+		"./**/*.ts",
+		"../src/worker",
+		"../src/shared",
+		"../.cloudflare/types"
+	]
 }
