@@ -1,4 +1,4 @@
-import type { CounselorDto, RoomDto } from "../../shared/api";
+import type { CounselorDto, PublicConfig, RoomDto } from "../../shared/api";
 import type { PublicSettings } from "../../shared/settings";
 import { useApi } from "./useApi";
 
@@ -16,3 +16,5 @@ export function parseSpecialties(bio: string | null): string[] {
 export const ROOM_THEMES = ["forest", "water", "sun"] as const;
 export type RoomTheme = (typeof ROOM_THEMES)[number];
 export const roomTheme = (index: number): RoomTheme => ROOM_THEMES[index % ROOM_THEMES.length]!;
+
+export const usePublicConfig = () => useApi<PublicConfig>("/public/config");

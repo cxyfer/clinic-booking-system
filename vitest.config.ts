@@ -16,6 +16,7 @@ export default defineConfig({
 						EMAIL_PROVIDER: "console",
 						EMAIL_FROM: "Clinic <no-reply@example.com>",
 						WEBHOOK_URL: "",
+						TURNSTILE_SITE_KEY: "",
 						WEBHOOK_SECRET: "test-webhook-secret",
 						// 在 setup file 套用 migrations
 						TEST_MIGRATIONS: migrations,

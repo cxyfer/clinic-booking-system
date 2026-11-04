@@ -80,6 +80,15 @@ cf workers secrets update TURNSTILE_SECRET_KEY --worker clinic-booking-system --
 | 有自己的網域 | 在 Resend 驗證網域，在 `cloudflare.config.ts` 設 `EMAIL_PROVIDER` 為 `resend`、`EMAIL_FROM` 為 `Clinic <no-reply@your-domain>` |
 | 沒有網域 | Resend 未驗證網域時只能寄給帳號本人，建議維持 `EMAIL_PROVIDER` 為 `console`，改用 `WEBHOOK_URL` 接收通知 |
 
+> [!IMPORTANT]
+> 預設需要 email 驗證，個案必須收到確認信才能保留時段。沒有實際寄信（`console` / `none`）時，請把 `requireEmailVerification` 改為 `false`，否則預約都會在保留期限後逾時。後台設定頁完成前，可直接寫入 D1：
+> `cf d1 raw <DB_ID> --sql="INSERT OR REPLACE INTO settings (key, value) VALUES ('requireEmailVerification', 'false')"`
+> `console` 會把信件內文（含管理連結）寫進 log，只適合本地開發。
+
+### 防濫用（選填）
+
+在 Cloudflare Dashboard 建立 Turnstile widget，將 site key 填入 `cloudflare.config.ts` 的 `TURNSTILE_SITE_KEY`，並以上方指令設定 `TURNSTILE_SECRET_KEY`。兩者需同時設定；只設定 secret 而沒有 site key 時，所有預約都會被擋下。
+
 Webhook 請求帶有 `X-Signature: sha256=<HMAC-SHA256(body, WEBHOOK_SECRET)>`，接收端應驗證此簽章。
 
 ## 目錄結構

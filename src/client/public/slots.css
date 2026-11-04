@@ -1,0 +1,201 @@
+.slot-picker {
+	display: grid;
+	gap: var(--s-6);
+	align-items: start;
+}
+
+@media (min-width: 52rem) {
+	.slot-picker {
+		grid-template-columns: minmax(0, 23rem) minmax(0, 1fr);
+	}
+}
+
+/* ── 月曆 ─────────────────────────────────────────────── */
+.cal {
+	padding: var(--s-4);
+	border: 1px solid var(--c-line);
+	border-radius: var(--radius-m);
+	background: var(--c-paper);
+}
+
+.cal-nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--s-2);
+	margin-bottom: var(--s-3);
+	font-size: var(--t-sm);
+	font-weight: 500;
+}
+
+.cal-turn {
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--c-ink);
+	font-size: var(--t-md);
+	cursor: pointer;
+}
+.cal-turn:hover:not(:disabled) {
+	background: var(--c-mist);
+}
+.cal-turn:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+.cal-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: var(--s-1);
+}
+
+.cal-head {
+	padding-bottom: var(--s-1);
+	text-align: center;
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+}
+
+.cal-day {
+	position: relative;
+	display: grid;
+	place-items: center;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	font-family: var(--f-display);
+	cursor: pointer;
+}
+
+.cal-day input {
+	position: absolute;
+	opacity: 0;
+}
+
+.cal-day:hover:not([data-empty]) {
+	background: var(--c-mist);
+}
+
+.cal-day[data-empty] {
+	color: var(--c-line);
+	cursor: default;
+}
+
+.cal-num {
+	font-size: var(--t-base);
+	white-space: nowrap;
+}
+
+/* 有空檔的日子下方一顆葉光點 */
+.cal-dot {
+	position: absolute;
+	bottom: 14%;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: var(--c-moss);
+}
+
+.cal-day:has(input:checked) {
+	background: var(--c-night);
+	color: #fff;
+}
+.cal-day:has(input:checked) .cal-dot {
+	background: var(--c-light);
+}
+
+.cal-day:has(input:focus-visible) {
+	outline: 3px solid var(--c-moss);
+	outline-offset: 1px;
+}
+
+.cal .status-text {
+	margin-top: var(--s-3);
+	font-size: var(--t-sm);
+}
+
+/* ── 時間與諮商室 ─────────────────────────────────────── */
+.slot-side {
+	display: grid;
+	gap: var(--s-6);
+}
+
+.slot-group {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.slot-group legend {
+	padding: 0;
+	margin-bottom: var(--s-3);
+	font-family: var(--f-display);
+	font-size: var(--t-md);
+	font-weight: 700;
+}
+
+.time-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+	gap: var(--s-2);
+}
+
+.time-pill {
+	position: relative;
+	display: grid;
+	place-items: center;
+	min-height: 3rem;
+	border: 1.5px solid var(--c-line);
+	border-radius: var(--radius-pill);
+	background: var(--c-paper);
+	font-variant-numeric: tabular-nums;
+	cursor: pointer;
+}
+
+.time-pill input {
+	position: absolute;
+	opacity: 0;
+}
+
+.time-pill:hover {
+	border-color: var(--c-stone);
+}
+
+.time-pill:has(input:checked) {
+	border-color: var(--c-moss);
+	background: var(--c-moss);
+	color: #fff;
+}
+
+.time-pill:has(input:focus-visible) {
+	outline: 3px solid var(--c-moss);
+	outline-offset: 2px;
+}
+
+/* 諮商室選項沿用 .choice，左側以識別色標示 */
+.choice-room {
+	--room: var(--c-room-forest);
+}
+.choice-room.room-water {
+	--room: var(--c-room-water);
+}
+.choice-room.room-sun {
+	--room: var(--c-room-sun);
+}
+
+.choice-swatch {
+	flex: none;
+	width: 0.75rem;
+	align-self: stretch;
+	border-radius: var(--radius-pill);
+	background: var(--room);
+}
+
+.choice-room:has(input:checked) {
+	border-color: var(--room);
+	box-shadow: inset 0 0 0 1px var(--room);
+}

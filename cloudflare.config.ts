@@ -30,6 +30,8 @@ export default defineConfig((ctx) => ({
 			EMAIL_FROM: bindings.text("Clinic <no-reply@example.com>"),
 			// 留空則停用 webhook
 			WEBHOOK_URL: bindings.text(""),
+			// Cloudflare Turnstile site key；留空則不顯示驗證（需同時設定 TURNSTILE_SECRET_KEY secret）
+			TURNSTILE_SITE_KEY: bindings.text(""),
 			// migrations 目錄為預設的 ./migrations（cf d1 migrations apply --dir）
 			// Fork 部署時請改成自己的 D1 ID（cf d1 create --name clinic-booking）
 			DB: bindings.d1({

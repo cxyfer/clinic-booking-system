@@ -60,8 +60,25 @@ confirmed ◄──── 確認 ──── pending ──── 拒絕 / 逾�
 - `pending` 與 `confirmed` 都會占用時段，避免確認期間被他人預約
 - `manual` 模式下，`pending` 超過 `pending_expire_hours` 未處理 → Cron 標記為 `expired` 並通知個案
 
-**Email 驗證**：送出後狀態為 `unverified`，個案須在 `verificationHoldMinutes`（預設 15 分鐘）內點擊驗證連結，
-才進入 `pending` 或 `confirmed`；逾時由 Cron 標記為 `expired`。可在後台以 `requireEmailVerification` 關閉。
+**Email 驗證**：送出後狀態為 `unverified`，個案須在 `verificationHoldMinutes`（預設 15 分鐘）內打開確認信中的連結，
+並在管理頁按下「確認預約」（POST，避免信箱的連結掃描器自動驗證），才進入 `pending` 或 `confirmed`；
+逾時由 Cron 標記為 `expired`，新預約遇到同時段已逾時的保留也會先釋出。可在後台以 `requireEmailVerification` 關閉。
+需要驗證時，建立預約的 API 不回傳 token，管理連結只寄到信箱。
+
+**管理連結**：每筆預約一個隨機 token（DB 只存 SHA-256），連結為 `/booking#t=<token>`；token 放在 fragment，
+不會出現在伺服器請求紀錄，API 一律以 POST body 傳遞。
+
+### Public API（`/api/public`）
+
+| Method | Path | 說明 |
+|---|---|---|
+| GET | `/availability?counselor=&from=&days=` | 可預約時段（最多 31 天），每個時段列出可用空間 |
+| GET | `/config` | 前端設定（Turnstile site key） |
+| POST | `/bookings` | 建立預約；時段已被占用回 409 |
+| POST | `/bookings/lookup` | `{ token }` 查詢預約 |
+| POST | `/bookings/verify` | `{ token }` email 驗證 |
+| POST | `/bookings/cancel` | `{ token }` 個案取消（須在取消期限前；未驗證的預約隨時可取消且不寄信） |
+| POST | `/bookings/ics` | `{ token }` 下載 `.ics` |
 
 ## 4. 時段模型
 
@@ -91,7 +108,7 @@ CREATE UNIQUE INDEX uq_booking_room_slot ON bookings (room_id, start_at)
 | `room_hours` | room_id, weekday, start_time, end_time |
 | `availability_rules` | id, counselor_id, weekday, start_time, end_time, effective_from, effective_to |
 | `availability_exceptions` | id, counselor_id?, room_id?, date, start_time?, end_time?, kind(`block`/`extra`), reason |
-| `bookings` | id, counselor_id, room_id, start_at, end_at, status, client_name, client_email, client_phone?, manage_token_hash, verify_token_hash?, ics_sequence, created_at, confirmed_at, cancelled_at, cancelled_by(`client`/`staff`), cancel_reason |
+| `bookings` | id, counselor_id, room_id, start_at, end_at, status, client_name, client_email, client_phone?, manage_token_hash, hold_expires_at, ics_sequence, created_at, confirmed_at, cancelled_at, cancelled_by(`client`/`staff`), cancel_reason |
 | `users` | id, email, password_hash, role(`admin`/`counselor`), counselor_id?, is_active |
 | `sessions` | id_hash, user_id, expires_at |
 | `auth_tokens` | token_hash, user_id, purpose(`password_setup`/`password_reset`), expires_at, used_at |
@@ -128,12 +145,14 @@ CREATE UNIQUE INDEX uq_booking_room_slot ON bookings (room_id, start_at)
 
 - Provider 由環境變數 `EMAIL_PROVIDER=resend|console|none` 決定；`RESEND_API_KEY`、`EMAIL_FROM`
 - Resend 未驗證網域時只能寄給帳號本人 → 開源無網域者使用 `webhook` 或 `console`
-- 重試使用 Resend `Idempotency-Key`，避免重複寄送
+- Outbox：通知與預約狀態變更在同一個 D1 batch 寫入 `notifications`，回應後以 `waitUntil` 寄送，
+  失敗由 Cron 重試（1 分、5 分、30 分、2 小時、6 小時後標記 `failed`）；寄出後清除 payload 內容
+- 重試使用 Resend `Idempotency-Key`（= notification id），避免重複寄送
 - Webhook：通用 JSON + `X-Signature: sha256=HMAC(body)`；payload 不含個案聯絡資料
 
 ## 8. 加入日曆
-- `GET /api/bookings/:id/ics?token=...` 下載 `.ics`（UID 固定，取消時遞增 `SEQUENCE`）
-- 確認信附 `.ics` 附件，並提供 Google Calendar `render?action=TEMPLATE` 連結
+- 管理頁可下載 `.ics`（`POST /api/public/bookings/ics`，UID 固定，取消時遞增 `SEQUENCE`）並提供 Google Calendar `render?action=TEMPLATE` 連結
+- 確認信與取消信附 `.ics` 附件（取消時 `METHOD:CANCEL`）
 
 ## 9. 已確認的決策
 1. 預設需要 email 驗證（可於後台關閉）

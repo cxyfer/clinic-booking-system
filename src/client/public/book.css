@@ -139,3 +139,143 @@
 	margin-top: var(--s-2);
 	font-weight: 500;
 }
+
+.book-lead {
+	margin: calc(var(--s-5) * -1 + var(--s-2)) 0 var(--s-5);
+	color: var(--c-stone);
+}
+
+.book-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--s-3);
+}
+
+/* 選擇摘要 */
+.book-summary {
+	display: grid;
+	gap: var(--s-2);
+	margin: 0 0 var(--s-6);
+	padding: var(--s-4) var(--s-5);
+	border-left: 3px solid var(--c-moss);
+	background: var(--c-paper);
+	max-width: 36rem;
+}
+
+.book-summary div {
+	display: flex;
+	gap: var(--s-4);
+}
+
+.book-summary dt {
+	flex: none;
+	width: 4em;
+	color: var(--c-stone);
+}
+
+.book-summary dd {
+	margin: 0;
+}
+
+/* 表單 */
+.book-form {
+	display: grid;
+	gap: var(--s-5);
+	max-width: 30rem;
+}
+
+.field {
+	display: grid;
+	gap: var(--s-2);
+}
+
+.field > span {
+	font-weight: 500;
+}
+
+.field em {
+	margin-left: var(--s-2);
+	font-style: normal;
+	font-weight: 400;
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+}
+
+.field input {
+	min-height: 3rem;
+	padding: 0 var(--s-4);
+	border: 1.5px solid var(--c-line);
+	border-radius: var(--radius-s);
+	background: var(--c-paper);
+	font: inherit;
+	color: inherit;
+}
+
+.field input:focus-visible {
+	border-color: var(--c-moss);
+	outline: 3px solid rgb(47 102 85 / 0.25);
+	outline-offset: 0;
+}
+
+.field input:user-invalid {
+	border-color: #a3442f;
+}
+
+.field small {
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+	line-height: 1.6;
+}
+
+.form-error {
+	padding: var(--s-3) var(--s-4);
+	border-left: 3px solid #a3442f;
+	background: #f8ece8;
+	color: #6f2b1d;
+}
+
+.link-btn {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--c-moss);
+	font: inherit;
+	font-weight: 500;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+	cursor: pointer;
+}
+
+.btn-danger {
+	background: #a3442f;
+	color: #fff;
+}
+.btn-danger:hover {
+	background: #8b3826;
+}
+
+/* 完成／提示畫面 */
+.book-done {
+	display: grid;
+	gap: var(--s-4);
+	max-width: 36rem;
+}
+
+.book-done h1 {
+	font-size: var(--t-xl);
+}
+
+.book-done .book-summary {
+	margin: var(--s-2) 0;
+}
+
+.book-deadline {
+	max-width: 36rem;
+	padding: var(--s-3) var(--s-4);
+	border-left: 3px solid var(--c-light);
+	background: var(--c-paper);
+}
+
+.book-panel > .book-deadline {
+	margin-bottom: var(--s-6);
+}
