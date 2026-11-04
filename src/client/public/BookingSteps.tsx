@@ -9,7 +9,7 @@ function buildSteps(settings: PublicSettings) {
 		{ title: "留下聯絡方式", body: "只需要姓名、Email 和電話，不用註冊帳號。" },
 	];
 	if (settings.requireEmailVerification) {
-		steps.push({ title: "點擊確認信", body: "我們會寄一封信到你的信箱，點信中的連結才會保留時段。" });
+		steps.push({ title: "點擊確認信", body: "我們會寄一封信到你的信箱，打開信中的連結並按下確認，才會保留時段。" });
 	}
 	steps.push(
 		settings.confirmationMode === "manual"

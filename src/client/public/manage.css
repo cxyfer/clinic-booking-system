@@ -1,0 +1,51 @@
+.manage {
+	display: grid;
+	gap: var(--s-4);
+	max-width: 36rem;
+}
+
+.manage-status {
+	font-size: var(--t-sm);
+	color: var(--c-stone);
+}
+
+.manage h1 {
+	font-size: var(--t-xl);
+}
+
+/* 成立的預約以葉光標題底線強調 */
+.manage[data-status="confirmed"] h1 {
+	text-decoration: underline 0.18em var(--c-light);
+	text-underline-offset: 0.25em;
+}
+
+.manage-body {
+	color: var(--c-stone);
+}
+
+.manage .book-summary {
+	margin: var(--s-2) 0;
+}
+
+.manage-calendar,
+.manage-cancel {
+	display: grid;
+	gap: var(--s-3);
+	padding-top: var(--s-5);
+	border-top: 1px solid var(--c-line);
+}
+
+.manage-calendar h2,
+.manage-cancel h2 {
+	font-size: var(--t-md);
+}
+
+.manage .book-actions {
+	margin-top: var(--s-2);
+}
+
+.cancel-confirm {
+	padding: var(--s-4);
+	border-radius: var(--radius-m);
+	background: var(--c-paper);
+}
