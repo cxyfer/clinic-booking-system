@@ -123,6 +123,9 @@ export function computeSlots(input: SlotInput): Slot[] {
 				seen.add(start);
 
 				const startMs = zonedToUtc(date, start, timezone);
+				// 夏令時間跳過的牆上時間不存在（例如紐約 3 月的 02:30），轉換結果會落在別的時間，略過
+				const wall = wallClock(startMs, timezone);
+				if (wall.date !== date || wall.minutes !== start) continue;
 				const endMs = startMs + duration * 60_000;
 				if (startMs < earliest) continue;
 				if (overlapsBusy(input.counselor.busy, startMs, endMs)) continue;

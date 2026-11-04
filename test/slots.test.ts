@@ -166,4 +166,25 @@ describe("computeSlots", () => {
 		);
 		expect(slots).toEqual([]);
 	});
+
+	it("略過夏令時間不存在的牆上時間", () => {
+		// 紐約 2026-03-08（週日）02:00 直接跳到 03:00
+		const slots = computeSlots(
+			input({
+				timezone: "America/New_York",
+				now: Date.parse("2026-03-01T00:00:00Z"),
+				from: "2026-03-08",
+				to: "2026-03-08",
+				minLeadHours: 0,
+				slotIntervalMinutes: 30,
+				slotDurationMinutes: 30,
+				counselor: { rules: [{ weekday: 0, startTime: "01:00", endTime: "04:00" }], exceptions: [], busy: [] },
+				rooms: [{ id: "rm_a", hours: [{ weekday: 0, startTime: "00:00", endTime: "23:00" }], exceptions: [], busy: [] }],
+			}),
+		);
+		expect(times(slots)).toEqual(["01:00", "01:30", "03:00", "03:30"]);
+		for (const s of slots) {
+			expect(wallClock(Date.parse(s.startAt), "America/New_York")).toMatchObject({ date: s.date });
+		}
+	});
 });
